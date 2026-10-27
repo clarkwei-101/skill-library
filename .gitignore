@@ -1,0 +1,22 @@
+# Dependencies & build output
+skill-library-web/node_modules
+skill-library-web/.next
+skill-library-web/out
+skill-library-web/build
+skill-library-web/tsconfig.tsbuildinfo
+
+# Python
+skill-service/__pycache__
+*.pyc
+
+# Runtime data (seed skills and zips ARE committed)
+storage/books/*
+storage/tasks.json
+storage/zips/.tmp
+
+# OS / env
+.DS_Store
+.env
+.env.local
+*.pem
+npm-debug.log*

@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: ./skill-service
+      dockerfile: Dockerfile
+    volumes:
+      - ./storage:/storage
+    ports:
+      - "8000:8000"
+    environment:
+      SKILL_STORAGE_DIR: /storage
+      # Optional: set to enable authenticated z-library lookups.
+      ZLIB_COOKIE: ""
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  web:
+    build:
+      context: ./skill-library-web
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      # The browser talks to localhost:8000; the server container reaches the
+      # API directly over the compose network.
+      API_INTERNAL_URL: http://api:8000
