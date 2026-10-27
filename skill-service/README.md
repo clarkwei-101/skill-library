@@ -104,3 +104,53 @@ python3 scripts/smoke_test.py
 
 49 assertions covering the catalog, downloads, z-library guidance, and
 `.txt`/`.docx`/`.epub`/`.pdf` conversion.
+
+## Deploy to Railway
+
+The live API is at **https://api-production-8d9a.up.railway.app**
+
+Project `skill-library`, service `api`, environment `production`.
+
+### Layout
+
+The `Dockerfile` lives at the **repository root** so the build context can
+include both `skill-service/app` and the seed catalog in `storage/`.  The
+image copies `storage/` to `/app/seed/storage`, and on startup the service
+copies that tree into `SKILL_STORAGE_DIR` whenever the storage root has no
+skills yet — so a freshly attached Railway volume is seeded automatically.
+
+### Volume
+
+A Railway volume (`api-volume`, 500 MB on the FREE plan) is attached to the
+`api` service and mounted at `/storage`.
+
+### Environment variables
+
+| Variable | Value |
+| --- | --- |
+| `SKILL_STORAGE_DIR` | `/storage` |
+| `PORT` | `8000` |
+
+### Redeploy
+
+```bash
+cd ~/Documents/skill-library
+railway link -p de8b17c0-e0be-4e3c-826b-a9843745e131 -s api
+railway up --service api --detach
+railway service status
+```
+
+Redeploy after a GitHub-connected build instead with:
+
+```bash
+railway redeploy --service api --yes
+```
+
+### Verify
+
+```bash
+curl https://api-production-8d9a.up.railway.app/health
+curl https://api-production-8d9a.up.railway.app/api/skills
+curl -OJ https://api-production-8d9a.up.railway.app/api/skills/xiaohongshu-bao-kuan-guilv/download
+```
+
