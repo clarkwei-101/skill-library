@@ -44,6 +44,7 @@ app.add_middleware(
 @app.on_event("startup")
 def _startup() -> None:
     config.ensure_dirs()
+    config.seed_storage()
     tasks.load_tasks()
 
 

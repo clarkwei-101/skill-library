@@ -1,7 +1,7 @@
 services:
   api:
     build:
-      context: ./skill-service
+      context: .
       dockerfile: Dockerfile
     volumes:
       - ./storage:/storage

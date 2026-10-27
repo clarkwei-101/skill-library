@@ -1,0 +1,19 @@
+# Build context for the API image.
+#
+# The context is the repository root so the image can bundle both the service
+# code (skill-service/) and the seed catalog (storage/).  The service copies
+# the seed tree into an empty storage root on first boot, so a fresh Railway
+# volume still serves a non-empty catalog.
+.git
+.gitignore
+**/__pycache__
+**/*.pyc
+skill-library-web
+storage/books
+storage/tasks.json
+storage/zips/.tmp
+.env
+.env.local
+*.pem
+node_modules
+.next
